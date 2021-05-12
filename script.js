@@ -1,30 +1,29 @@
 //HTML elements;
 const gameDIV = document.querySelector(".game");
 
-let matchFadeOutDIV = document.createElement("div");
+const matchFadeOutDIV = document.createElement("div");
 matchFadeOutDIV.setAttribute("class", "match fadeOut");
 document.body.appendChild(matchFadeOutDIV);
 gameDIV.appendChild(matchFadeOutDIV);
 
-let chooseAnOptionH2 = document.createElement("h2");
+const chooseAnOptionH2 = document.createElement("h2");
 chooseAnOptionH2.setAttribute("class", "winner");
 chooseAnOptionH2.textContent = "Choose an option";
 document.body.appendChild(chooseAnOptionH2);
 matchFadeOutDIV.appendChild(chooseAnOptionH2);
 
-let handsDIV = document.createElement("div");
+const handsDIV = document.createElement("div");
 handsDIV.setAttribute("class", "hands");
 handsDIV.innerHTML = '<img class="player-hand" src="./assets/rock.png" alt="" />    <img class="computer-hand" src="./assets/rock.png" alt="" />';
 document.body.appendChild(handsDIV);
 matchFadeOutDIV.appendChild(handsDIV);
 
-let optionsDIV = document.createElement("div");
+const optionsDIV = document.createElement("div");
 optionsDIV.setAttribute("class", "options");
 optionsDIV.innerHTML = '<button class="rock">rock</button>  <button class="paper">paper</button>  <button class="scissors">scissors</button>';
 document.body.appendChild(optionsDIV);
 matchFadeOutDIV.appendChild(optionsDIV);
 //End here;
-
 
 
 const game = () => {
@@ -43,8 +42,9 @@ const game = () => {
         startBTN.addEventListener("click", () => {
             introScreen.classList.add("fadeOut");
             match.classList.add("fadeIn");
-            score.classList.add("fadeIn");
+            return score.classList.remove("fadeOut");
         });
+        return;
     };
 
     //Play Match;
@@ -86,10 +86,13 @@ const game = () => {
                     playerHand.src = `./assets/${this.textContent}.png`;
                     computerHand.src = `./assets/${computerChoice}.png`;
 
-                    //Buttons and text visible
-                    optionsDIV.classList.remove("hidden");
-                    chooseAnOptionH2.classList.remove("hidden");
-                    visible();
+                    setTimeout(function () {
+                        //Buttons and text visible
+                        optionsDIV.classList.remove("hidden");
+                        chooseAnOptionH2.classList.remove("hidden");
+                        visible();
+                    }, 50);
+                    return;
                 }, 900);
 
                 //Animation
@@ -101,7 +104,7 @@ const game = () => {
         function visible() {
             optionsDIV.classList.add("visible");
             chooseAnOptionH2.classList.add("visible");
-            setTimeout(() => { 
+            setTimeout(() => {
                 optionsDIV.classList.remove("visible");
                 chooseAnOptionH2.classList.remove("visible");
             }, 160);
@@ -183,13 +186,35 @@ const game = () => {
         return;
     };
 
+    const restart = () => {
+        //change score
+        const playerScore = document.querySelector(".player-score p");
+        const computerScore = document.querySelector(".computer-score p");
+        playerScore.textContent = pScore;
+        computerScore.textContent = cScore;
+
+        cScore = 0;
+        pScore = 0;
+        playerScore.innerHTML = 0;
+        computerScore.innerHTML = 0;
+
+        //Hands closed
+        const playerHand = document.querySelector(".player-hand");
+        const computerHand = document.querySelector(".computer-hand");
+        playerHand.src = `./assets/rock.png`;
+        computerHand.src = `./assets/rock.png`;
+
+        //Default text
+        chooseAnOptionH2.textContent = "Choose an option";
+        return;
+    };
 
     const computerWinner = () => {
         const modalOverlayError = document.createElement("div");
         modalOverlayError.setAttribute("class", "modal-overlay-error");
         gameDIV.appendChild(modalOverlayError);
 
-        let modalError = document.createElement("div");
+        const modalError = document.createElement("div");
         modalError.setAttribute("class", "modal-error");
         modalOverlayError.appendChild(modalError);
 
@@ -197,7 +222,7 @@ const game = () => {
         modalMessage.setAttribute("class", "modal-message");
         modalError.appendChild(modalMessage);
 
-        let closeBTN = document.createElement("span");
+        const closeBTN = document.createElement("span");
         closeBTN.setAttribute("class", "closebtn");
         closeBTN.innerHTML = "&times;";
         modalMessage.appendChild(closeBTN);
@@ -213,62 +238,31 @@ const game = () => {
         modalMessage.appendChild(ErrorMessage2);
 
 
-        modalOverlayError.classList.add('show-error');
-
+        modalOverlayError.classList.add('show-error'); //Show error
 
         //Close alert
         closeBTN.addEventListener("click", () => {
-            modalOverlayError.classList.remove('show-error');
-
-            //change score
-            const playerScore = document.querySelector(".player-score p");
-            const computerScore = document.querySelector(".computer-score p");
-            playerScore.textContent = pScore;
-            computerScore.textContent = cScore;
-
-            cScore = 0;
-            pScore = 0;
-            playerScore.innerHTML = 0;
-            computerScore.innerHTML = 0;
-
-            //Hands closed
-            const playerHand = document.querySelector(".player-hand");
-            const computerHand = document.querySelector(".computer-hand");
-            playerHand.src = `./assets/rock.png`;
-            computerHand.src = `./assets/rock.png`;
-
-            //Default text
-            chooseAnOptionH2.textContent = "Choose an option";
+            modalError.classList.add("hide");
+            setTimeout(function () {
+                modalError.classList.remove("hide");
+                restart();
+                modalOverlayError.classList.remove('show-error');
+                return modalOverlayError.parentNode.removeChild(modalOverlayError); //Will stop to spam the alert in html 
+            }, 800);
             return;
         });
 
         //able to close alert with ESC KEY;
-        window.document.addEventListener("keydown", (e) => {
-            if (!e) {
-                return e = event;
-            };
-            if (e.keyCode == 27) {
-                modalOverlayError.classList.remove('show-error');
-
-                //change score
-                const playerScore = document.querySelector(".player-score p");
-                const computerScore = document.querySelector(".computer-score p");
-                playerScore.textContent = pScore;
-                computerScore.textContent = cScore;
-
-                cScore = 0;
-                pScore = 0;
-                playerScore.innerHTML = 0;
-                computerScore.innerHTML = 0;
-
-                //Hands closed
-                const playerHand = document.querySelector(".player-hand");
-                const computerHand = document.querySelector(".computer-hand");
-                playerHand.src = `./assets/rock.png`;
-                computerHand.src = `./assets/rock.png`;
-
-                //Default text
-                chooseAnOptionH2.textContent = "Choose an option";
+        window.document.addEventListener("keydown", e => {
+            if (e.keyCode === 27) {
+                modalError.classList.add("hide");
+                setTimeout(function () {
+                    modalError.classList.remove("hide");
+                    restart();
+                    modalOverlayError.classList.remove('show-error');
+                    return modalOverlayError.parentNode.removeChild(modalOverlayError); //Will stop to spam the alert in html 
+                }, 900);
+                return;
             };
         });
         return;
@@ -279,7 +273,7 @@ const game = () => {
         modalOverlayWinner.setAttribute("class", "modal-overlay-winner");
         gameDIV.appendChild(modalOverlayWinner);
 
-        let modalWinner = document.createElement("div");
+        const modalWinner = document.createElement("div");
         modalWinner.setAttribute("class", "modal-winner");
         modalOverlayWinner.appendChild(modalWinner);
 
@@ -287,7 +281,7 @@ const game = () => {
         modalMessage.setAttribute("class", "modal-message");
         modalWinner.appendChild(modalMessage);
 
-        let closeBTN = document.createElement("span");
+        const closeBTN = document.createElement("span");
         closeBTN.setAttribute("class", "closebtn");
         closeBTN.innerHTML = "&times;";
         modalMessage.appendChild(closeBTN);
@@ -302,31 +296,18 @@ const game = () => {
         WinnerMessage2.textContent = "Player wins!";
         modalMessage.appendChild(WinnerMessage2);
 
-        modalOverlayWinner.classList.add('show-winner');
+        modalOverlayWinner.classList.add('show-winner'); //Show winner
 
         //Close alert
         closeBTN.addEventListener("click", () => {
-            modalOverlayWinner.classList.remove('show-winner');
-
-            //Change score
-            const playerScore = document.querySelector(".player-score p");
-            const computerScore = document.querySelector(".computer-score p");
-            playerScore.textContent = pScore;
-            computerScore.textContent = cScore;
-
-            cScore = 0;
-            pScore = 0;
-            playerScore.innerHTML = 0;
-            computerScore.innerHTML = 0;
-
-            //Hands closed;
-            const playerHand = document.querySelector(".player-hand");
-            const computerHand = document.querySelector(".computer-hand");
-            playerHand.src = `./assets/rock.png`;
-            computerHand.src = `./assets/rock.png`;
-
-            //Default text
-            chooseAnOptionH2.textContent = "Choose an option";
+            modalWinner.classList.add("hide");
+            setTimeout(function () {
+                modalWinner.classList.remove("hide");
+                restart();
+                modalOverlayWinner.classList.remove('show-winner');
+                return modalOverlayWinner.parentNode.removeChild(modalOverlayWinner); //Will stop to spam the alert in html 
+            }, 800);
+            return;
         });
 
         //able to close alert with ESC KEY;
@@ -335,33 +316,20 @@ const game = () => {
                 return e = event;
             };
             if (e.keyCode == 27) {
-                modalOverlayWinner.classList.remove('show-winner');
-
-                //change score
-                const playerScore = document.querySelector(".player-score p");
-                const computerScore = document.querySelector(".computer-score p");
-                playerScore.textContent = pScore;
-                computerScore.textContent = cScore;
-
-                cScore = 0;
-                pScore = 0;
-                playerScore.innerHTML = 0;
-                computerScore.innerHTML = 0;
-
-                //Hands closed;
-                const playerHand = document.querySelector(".player-hand");
-                const computerHand = document.querySelector(".computer-hand");
-                playerHand.src = `./assets/rock.png`;
-                computerHand.src = `./assets/rock.png`;
-
-                //Default text
-                chooseAnOptionH2.textContent = "Choose an option";
+                modalWinner.classList.add("hide");
+                setTimeout(function () {
+                    modalWinner.classList.remove("hide");
+                    restart();
+                    modalOverlayWinner.classList.remove('show-winner');
+                    return modalOverlayWinner.parentNode.removeChild(modalOverlayWinner); //Will stop to spam the alert in html 
+                }, 800);
+                return;
             };
         });
         return;
     };
 
-
+  
     startGame();
     playMatch();
 };
