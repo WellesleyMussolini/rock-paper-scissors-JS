@@ -42,6 +42,7 @@ const game = () => {
         startBTN.addEventListener("click", () => {
             introScreen.classList.add("fadeOut");
             match.classList.add("fadeIn");
+            score.classList.add("fadeIn");
             return score.classList.remove("fadeOut");
         });
         return;
