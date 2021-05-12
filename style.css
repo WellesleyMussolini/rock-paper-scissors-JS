@@ -102,6 +102,45 @@
   transition: opacity 0.4s ease-in-out;
 }
 
+/*Animation hand shake*/
+
+@keyframes shakePlayer {
+  0% {
+    transform: rotateY(180deg) translateY(0px);
+  }
+  25% {
+    transform: rotateY(180deg) translateY(-50px);
+  }
+  50% {
+    transform: rotateY(180deg) translateY(0px);
+  }
+  75% {
+    transform: rotateY(180deg) translateY(-50px);
+  }
+  100% {
+    transform: rotateY(180deg) translateY(0px);
+  }
+}
+
+@keyframes shakeComputer {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(-50px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
 /*POP UP PC WINNER*/
 
 .modal-overlay-error {
@@ -137,27 +176,6 @@
   color: white;
   font-size: 20px;
   text-align: center;
-}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-
-.modal-error {
-  background-color: #f44336;
-  padding: 2.4rem;
-  width: 290px;
 }
 
 /*POP UP Player WINNER*/
@@ -208,50 +226,57 @@
   transition: 0.3s;
 }
 
-.closebtn:hover {
-  color: black;
+.modal-winner{
+  background-color: #25af30;
 }
 
-.modal-winner {
-  background-color: #25af30;
+.modal-error {
+  background-color: #f44336;
+}
+
+.modal-winner, .modal-error{
   padding: 2.4rem;
   width: 290px;
+  animation: show_toast 1s ease forwards;
 }
 
-/*Animation hand shake*/
-
-@keyframes shakePlayer {
+@keyframes show_toast {
   0% {
-    transform: rotateY(180deg) translateY(0px);
+    transform: translateY(-100%);
+    opacity: 0;
   }
-  25% {
-    transform: rotateY(180deg) translateY(-50px);
+  
+  40% {
+    opacity: 0.5;
   }
-  50% {
-    transform: rotateY(180deg) translateY(0px);
-  }
-  75% {
-    transform: rotateY(180deg) translateY(-50px);
-  }
-  100% {
-    transform: rotateY(180deg) translateY(0px);
+  
+  80% ,100% {
+    transform: translateY(-5%);
+    opacity: 1;
   }
 }
 
-@keyframes shakeComputer {
-  0% {
-    transform: translateY(0px);
-  }
-  25% {
-    transform: translateY(-50px);
-  }
-  50% {
-    transform: translateY(0px);
-  }
-  75% {
-    transform: translateY(-50px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+.modal-winner.hide{
+  animation: hide_toast 1s ease forwards;
 }
+.modal-error.hide{
+  animation: hide_toast 1s ease forwards;
+}
+
+  @keyframes hide_toast {
+  0%{
+  transform: translateY(-5%);
+  opacity: 1;
+  }
+  30%{
+  opacity: 0.5;
+  }
+  60%{
+  opacity: 0;
+  }
+  80%, 100%{
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  }
+  }
